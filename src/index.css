@@ -34,9 +34,21 @@
   place-items: center;
 } */
 
+body {
+  background-color: #242424;
+  color: #f9f9f9;
+}
+
+.geostar-regular {
+  font-family: "Geostar", serif;
+  font-weight: 400;
+  font-style: normal;
+}
+
 h1 {
   font-size: 3.2em;
   line-height: 1.1;
+  font-family: "Geostar", serif;
 }
 
 /* button {

@@ -6,36 +6,31 @@ const tierList = [
     id: 1,
     letter: "S",
     images: [],
+    color: "bg-red-500",
   },
   {
     id: 2,
     letter: "A",
     images: [],
+    color: "bg-orange-300",
   },
   {
     id: 3,
     letter: "B",
     images: [],
+    color: "bg-yellow-300",
   },
   {
     id: 4,
     letter: "C",
     images: [],
+    color: "bg-yellow-500",
   },
   {
     id: 5,
     letter: "D",
     images: [],
-  },
-  {
-    id: 6,
-    letter: "E",
-    images: [],
-  },
-  {
-    id: 7,
-    letter: "F",
-    images: [],
+    color: "bg-green-300",
   },
 ];
 
@@ -43,6 +38,7 @@ type Tier = {
   id: number;
   letter: string;
   images?: File[] | null;
+  color: string;
 };
 
 const TierList = () => {
@@ -138,15 +134,17 @@ const TierList = () => {
     <>
       <h1>Tierrify</h1>
 
-      <section className="mt-6 w-ful max-w-screen-xl border">
-        {tiers.map(({ id, letter, images }) => (
+      <section className="overflow-clip rounded-lg mt-6 w-ful max-w-screen-xl bg-zinc-900">
+        {tiers.map(({ id, letter, images, color }) => (
           <div
             key={id}
-            className="h-20 flex border items-center w-full"
+            className="h-20 flex items-center w-full"
             onDrop={(event) => handleDrop(event, id)}
             onDragOver={handleDragOver}
           >
-            <div className="h-full border-r w-24 flex justify-center items-center">
+            <div
+              className={`text-zinc-900 h-full w-24 flex justify-center items-center ${color.toString()}`}
+            >
               <h2>{letter}</h2>
             </div>
             <div className="w-full flex justify-center items-center">
@@ -169,12 +167,17 @@ const TierList = () => {
         ))}
       </section>
 
-      <section className="mt-6">
+      <section className="p-4 overflow-clip rounded-lg mt-6 w-ful max-w-screen-xl bg-zinc-900">
         <div className="flex flex-col items-start">
           <h2>Add Image</h2>
-          <Input type="file" multiple onChange={handleAddImage} />
+          <Input
+            type="file"
+            multiple
+            onChange={handleAddImage}
+            className="border border-none"
+          />
         </div>
-        <div className="min-h-20 border mt-3">
+        <div className="min-h-20 mt-3">
           <div className="flex flex-row items-center gap-2">
             {tierImages.map((image, index) => (
               <div key={index} className="flex items-center p-4">
