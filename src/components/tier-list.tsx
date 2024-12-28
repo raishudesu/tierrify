@@ -1,5 +1,8 @@
 import { ChangeEvent, useState } from "react";
 import { Input } from "./ui/input";
+import { Button } from "./ui/button";
+import { Download } from "lucide-react";
+import html2canvas from "html2canvas";
 
 const tierList = [
   {
@@ -44,6 +47,7 @@ type Tier = {
 const TierList = () => {
   const [tierImages, setTierImages] = useState<File[]>([]);
   const [tiers, setTiers] = useState<Tier[]>(tierList);
+  const [isDownloading, setIsDownloading] = useState(false);
 
   const handleAddImage = (e: ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
@@ -130,11 +134,51 @@ const TierList = () => {
     event.dataTransfer.setData("tierId", tierId?.toString() || "null");
     event.dataTransfer.setData("imageIndex", imageIndex?.toString() || "null");
   };
+
+  const handleDownload = () => {
+    const tierContainer = document.getElementById("tier-container");
+    if (!tierContainer) return;
+
+    html2canvas(tierContainer).then((canvas) => {
+      canvas.toBlob(
+        (blob) => {
+          if (blob) {
+            const imageUrl = URL.createObjectURL(blob);
+            const link = document.createElement("a");
+            link.href = imageUrl;
+            link.download = "tierrify-list";
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            URL.revokeObjectURL(imageUrl);
+          }
+          setIsDownloading(false);
+        },
+        "image/png",
+        1.0
+      );
+    });
+  };
   return (
     <>
       <h1>Tierrify</h1>
-
-      <section className="overflow-clip rounded-lg mt-6 w-ful max-w-screen-xl bg-zinc-900">
+      <Button
+        onClick={handleDownload}
+        className="mt-6 flex gap-2 place-self-end"
+        disabled={isDownloading}
+      >
+        {isDownloading ? (
+          "Converting..."
+        ) : (
+          <>
+            Download <Download size={18} />
+          </>
+        )}
+      </Button>
+      <section
+        id="tier-container"
+        className="overflow-clip rounded-lg mt-6 w-ful max-w-screen-xl bg-zinc-900"
+      >
         {tiers.map(({ id, letter, images, color }) => (
           <div
             key={id}
